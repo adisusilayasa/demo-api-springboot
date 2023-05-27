@@ -3,35 +3,40 @@ package com.demo.models.entity;
 import java.io.Serializable;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "table_product")
-public class Product implements Serializable{
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-    
+
     @NotEmpty(message = "Name is required")
-    @Column(name= "product_name", length=255)
+    @Column(name = "product_name", length = 255)
     private String name;
 
     @NotEmpty(message = "Description is required")
-    @Column(name= "product_description", length=255)
+    @Column(name = "product_description", length = 255)
     private String description;
 
     private double price;
@@ -40,16 +45,14 @@ public class Product implements Serializable{
     private Category category;
 
     @ManyToMany
-    @JoinTable(name = "table_product_supplier",
-    joinColumns = @JoinColumn(name = "product_id"),
-    inverseJoinColumns = @JoinColumn(name = "supplier_id"))
+    @JoinTable(name = "table_product_supplier", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "supplier_id"))
+    // @JsonManagedReference
     private Set<Supplier> suppliers;
 
-    public Product(){
-        
+    public Product() {
     }
 
-    public Product(Long id, String name, String description, double price){
+    public Product(Long id, String name, String description, double price) {
 
         this.id = id;
         this.name = name;
@@ -126,7 +129,6 @@ public class Product implements Serializable{
     public void setCategory(Category category) {
         this.category = category;
     }
-
 
     /**
      * @return Set<Supplier> return the suppliers

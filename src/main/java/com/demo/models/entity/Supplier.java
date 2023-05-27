@@ -3,17 +3,22 @@ package com.demo.models.entity;
 import java.io.Serializable;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "table_supplier")
-public class Supplier implements Serializable{
+public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,6 +36,8 @@ public class Supplier implements Serializable{
     private String email;
 
     @ManyToMany(mappedBy = "suppliers")
+    // @JsonBackReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Set<Product> products;
 
     /**
@@ -61,7 +68,6 @@ public class Supplier implements Serializable{
         this.name = name;
     }
 
-
     /**
      * @return String return the address
      */
@@ -89,7 +95,6 @@ public class Supplier implements Serializable{
     public void setEmail(String email) {
         this.email = email;
     }
-
 
     /**
      * @return Set<Product> return the products
